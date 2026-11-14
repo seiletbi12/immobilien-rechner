@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE = "immobilien-rechner-v1";
+const CACHE = "immobilien-rechner-v2";
 const ASSETS = [
   "index.html",
   "styles.css",
