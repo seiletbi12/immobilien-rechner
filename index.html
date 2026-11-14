@@ -35,9 +35,13 @@
         <label for="kp-miete">Kaltmiete pro m² (€/Monat)</label>
         <input type="number" id="kp-miete" inputmode="decimal" min="0" step="0.5" placeholder="z. B. 12">
       </div>
+      <div class="field">
+        <label for="kp-renov-prozent">Renovierungskosten (% vom Kaufpreis, Vorschlag 15 %)</label>
+        <input type="number" id="kp-renov-prozent" inputmode="decimal" min="0" max="100" step="1" value="15">
+      </div>
       <div class="result">
         <div class="result-row"><span>Kaufnebenkosten (10 %)</span><strong id="kp-neben">0 €</strong></div>
-        <div class="result-row"><span>Renovierung (max. 15 %)</span><strong id="kp-renov">0 €</strong></div>
+        <div class="result-row"><span>Renovierung</span><strong id="kp-renov">0 €</strong></div>
         <div class="result-row"><span>Summe Kauf</span><strong id="kp-summe">0 €</strong></div>
       </div>
       <div class="result">
@@ -62,6 +66,10 @@
         <label for="mp-miete">Miete pro m² (€/Monat)</label>
         <input type="number" id="mp-miete" inputmode="decimal" min="0" step="0.5" placeholder="z. B. 12">
       </div>
+      <div class="field">
+        <label for="mp-renov-prozent">Renovierungskosten (% vom Netto-Kaufpreis, Vorschlag 15 %)</label>
+        <input type="number" id="mp-renov-prozent" inputmode="decimal" min="0" max="100" step="1" value="15">
+      </div>
       <div class="result">
         <div class="result-row"><span>Kaltmiete pro Monat</span><strong id="mp-miete-monat">0 €</strong></div>
         <div class="result-row"><span>Kaltmiete pro Jahr</span><strong id="mp-miete-jahr">0 €</strong></div>
@@ -70,7 +78,7 @@
         <div class="result-row"><span>Max. Kaufpreis netto</span><strong id="mp-netto">0 €</strong></div>
         <div class="result-row"><span>Nebenkosten (10 %)</span><strong id="mp-neben">0 €</strong></div>
         <div class="result-row"><span>Max. Kaufpreis brutto</span><strong id="mp-brutto">0 €</strong></div>
-        <div class="result-row"><span>Renovierung (max. 15 %)</span><strong id="mp-renov">0 €</strong></div>
+        <div class="result-row"><span>Renovierung</span><strong id="mp-renov">0 €</strong></div>
         <div class="result-row highlight"><span>Gesamtbudget</span><strong id="mp-gesamt">0 €</strong></div>
       </div>
       <p class="hint">Gesamtbudget = max. Kaufpreis brutto + Renovierungskosten</p>
