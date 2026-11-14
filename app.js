@@ -29,15 +29,16 @@ function bindTabs() {
 }
 
 function initKaufpreis() {
-  const ids = ["kp-preis", "kp-groesse", "kp-miete"];
+  const ids = ["kp-preis", "kp-groesse", "kp-miete", "kp-renov-prozent"];
 
   function update() {
     const preis = val("kp-preis");
     const groesse = val("kp-groesse");
     const mieteProM2 = val("kp-miete");
+    const renovProzent = Math.min(100, Math.max(0, parseFloat(document.getElementById("kp-renov-prozent").value) || 0));
 
     const neben = preis * 0.10;
-    const renov = preis * 0.15;
+    const renov = preis * (renovProzent / 100);
     const summe = preis + neben + renov;
     const mieteMonat = groesse * mieteProM2;
     const mieteJahr = mieteMonat * 12;
@@ -79,18 +80,19 @@ function initKaufpreis() {
 }
 
 function initMaxPreis() {
-  const ids = ["mp-groesse", "mp-miete"];
+  const ids = ["mp-groesse", "mp-miete", "mp-renov-prozent"];
 
   function update() {
     const groesse = val("mp-groesse");
     const mieteProM2 = val("mp-miete");
+    const renovProzent = Math.min(100, Math.max(0, parseFloat(document.getElementById("mp-renov-prozent").value) || 0));
 
     const mieteMonat = groesse * mieteProM2;
     const mieteJahr = mieteMonat * 12;
     const netto = mieteJahr * 15;
     const neben = netto * 0.10;
     const brutto = netto + neben;
-    const renov = netto * 0.15;
+    const renov = netto * (renovProzent / 100);
     const gesamt = brutto + renov;
 
     document.getElementById("mp-miete-monat").textContent = euro(mieteMonat);
