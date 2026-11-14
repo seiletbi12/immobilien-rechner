@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0f766e">
+  <meta name="description" content="Immobilien-Rechner: Kaufpreis-Analyse, Faktor, Rendite und maximaler Kaufpreis – offline nutzbar.">
+  <title>Immobilien-Rechner</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>Immobilien-Rechner</h1>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" role="tab" data-tab="kaufpreis">Kaufpreis-Analyse</button>
+    <button class="tab" role="tab" data-tab="maxpreis">Max. Kaufpreis</button>
+  </nav>
+
+  <main>
+    <section class="panel active" id="panel-kaufpreis">
+      <h2>Kaufpreis bewerten</h2>
+      <div class="field">
+        <label for="kp-preis">Kaufpreis (€)</label>
+        <input type="number" id="kp-preis" inputmode="decimal" min="0" step="1000" placeholder="z. B. 193000">
+      </div>
+      <div class="field">
+        <label for="kp-groesse">Größe (m²)</label>
+        <input type="number" id="kp-groesse" inputmode="numeric" min="1" step="1" placeholder="z. B. 93">
+      </div>
+      <div class="field">
+        <label for="kp-miete">Kaltmiete pro m² (€/Monat)</label>
+        <input type="number" id="kp-miete" inputmode="decimal" min="0" step="0.5" placeholder="z. B. 12">
+      </div>
+      <div class="result">
+        <div class="result-row"><span>Kaufnebenkosten (10 %)</span><strong id="kp-neben">0 €</strong></div>
+        <div class="result-row"><span>Renovierung (max. 15 %)</span><strong id="kp-renov">0 €</strong></div>
+        <div class="result-row"><span>Summe Kauf</span><strong id="kp-summe">0 €</strong></div>
+      </div>
+      <div class="result">
+        <div class="result-row"><span>Kaltmiete monatlich</span><strong id="kp-miete-monat">0 €</strong></div>
+        <div class="result-row"><span>Kaltmiete jährlich</span><strong id="kp-miete-jahr">0 €</strong></div>
+      </div>
+      <div class="result">
+        <div class="result-row"><span>Faktor (Summe ÷ Jahresmiete)</span><strong id="kp-faktor">–</strong></div>
+        <div class="badge-row"><span class="badge" id="kp-faktor-badge">–</span></div>
+        <div class="result-row highlight"><span>Bruttorendite</span><strong id="kp-rendite">–</strong></div>
+      </div>
+      <p class="hint">Faktor-Bewertung: unter 12 gut · 13–16 moderat · über 17 teuer</p>
+    </section>
+
+    <section class="panel" id="panel-maxpreis">
+      <h2>Maximaler Kaufpreis (Faktor 15)</h2>
+      <div class="field">
+        <label for="mp-groesse">Quadratmeter (m²)</label>
+        <input type="number" id="mp-groesse" inputmode="numeric" min="1" step="1" placeholder="z. B. 93">
+      </div>
+      <div class="field">
+        <label for="mp-miete">Miete pro m² (€/Monat)</label>
+        <input type="number" id="mp-miete" inputmode="decimal" min="0" step="0.5" placeholder="z. B. 12">
+      </div>
+      <div class="result">
+        <div class="result-row"><span>Kaltmiete pro Monat</span><strong id="mp-miete-monat">0 €</strong></div>
+        <div class="result-row"><span>Kaltmiete pro Jahr</span><strong id="mp-miete-jahr">0 €</strong></div>
+      </div>
+      <div class="result">
+        <div class="result-row"><span>Max. Kaufpreis netto</span><strong id="mp-netto">0 €</strong></div>
+        <div class="result-row"><span>Nebenkosten (10 %)</span><strong id="mp-neben">0 €</strong></div>
+        <div class="result-row"><span>Max. Kaufpreis brutto</span><strong id="mp-brutto">0 €</strong></div>
+        <div class="result-row"><span>Renovierung (max. 15 %)</span><strong id="mp-renov">0 €</strong></div>
+        <div class="result-row highlight"><span>Gesamtbudget</span><strong id="mp-gesamt">0 €</strong></div>
+      </div>
+      <p class="hint">Gesamtbudget = max. Kaufpreis brutto + Renovierungskosten</p>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>Funktioniert offline · Zum Installieren: Menü → „Zum Startbildschirm hinzufügen“</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
