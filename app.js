@@ -7,6 +7,16 @@ const fmtEuro = new Intl.NumberFormat("de-DE", {
 });
 const fmtNum = new Intl.NumberFormat("de-DE", { maximumFractionDigits: 2 });
 
+const LAGE_RICHTWERTE = [
+  ["Baden-Baden", 12],
+  ["Bühl", 9.5],
+  ["Rastatt", 9],
+  ["Achern", 8.5],
+  ["Karlsruhe", 11],
+  ["Offenburg", 10.5],
+  ["Eigener Wert", null]
+];
+
 function val(id) {
   const v = parseFloat(document.getElementById(id).value);
   return Number.isFinite(v) && v > 0 ? v : 0;
@@ -25,6 +35,31 @@ function bindTabs() {
       tab.classList.add("active");
       document.getElementById(`panel-${tab.dataset.tab}`).classList.add("active");
     });
+  });
+}
+
+function initLage(lageId, mieteId) {
+  const select = document.getElementById(lageId);
+  const miete = document.getElementById(mieteId);
+
+  const placeholder = document.createElement("option");
+  placeholder.value = "";
+  placeholder.textContent = "Ort wählen / eigener Wert";
+  placeholder.selected = true;
+  select.appendChild(placeholder);
+
+  LAGE_RICHTWERTE.forEach(([name, wert]) => {
+    const option = document.createElement("option");
+    option.value = name;
+    option.textContent = wert === null ? name : `${name} (ca. ${fmtNum.format(wert)} €/m²)`;
+    select.appendChild(option);
+  });
+
+  select.addEventListener("change", () => {
+    const eintrag = LAGE_RICHTWERTE.find(([name]) => name === select.value);
+    if (!eintrag || eintrag[1] === null) return;
+    miete.value = eintrag[1];
+    miete.dispatchEvent(new Event("input", { bubbles: true }));
   });
 }
 
@@ -110,6 +145,8 @@ function initMaxPreis() {
 
 function init() {
   bindTabs();
+  initLage("kp-lage", "kp-miete");
+  initLage("mp-lage", "mp-miete");
   initKaufpreis();
   initMaxPreis();
 

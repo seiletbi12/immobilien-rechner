@@ -32,6 +32,10 @@
         <input type="number" id="kp-groesse" inputmode="numeric" min="1" step="1" placeholder="z. B. 93">
       </div>
       <div class="field">
+        <label for="kp-lage">Ort / Lage (Miet-Richtwert)</label>
+        <select id="kp-lage"></select>
+      </div>
+      <div class="field">
         <label for="kp-miete">Kaltmiete pro m² (€/Monat)</label>
         <input type="number" id="kp-miete" inputmode="decimal" min="0" step="0.5" placeholder="z. B. 12">
       </div>
@@ -53,7 +57,7 @@
         <div class="badge-row"><span class="badge" id="kp-faktor-badge">–</span></div>
         <div class="result-row highlight"><span>Bruttorendite</span><strong id="kp-rendite">–</strong></div>
       </div>
-      <p class="hint">Faktor-Bewertung: unter 12 gut · 13–16 moderat · über 17 teuer</p>
+      <p class="hint">Faktor-Bewertung: unter 12 gut · 13–16 moderat · über 17 teuer · Miet-Richtwerte sind Orientierung, bitte individuell anpassen</p>
     </section>
 
     <section class="panel" id="panel-maxpreis">
@@ -61,6 +65,10 @@
       <div class="field">
         <label for="mp-groesse">Quadratmeter (m²)</label>
         <input type="number" id="mp-groesse" inputmode="numeric" min="1" step="1" placeholder="z. B. 93">
+      </div>
+      <div class="field">
+        <label for="mp-lage">Ort / Lage (Miet-Richtwert)</label>
+        <select id="mp-lage"></select>
       </div>
       <div class="field">
         <label for="mp-miete">Miete pro m² (€/Monat)</label>
