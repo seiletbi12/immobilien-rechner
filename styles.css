@@ -112,7 +112,8 @@ main {
   margin-bottom: 6px;
 }
 
-.field input[type="number"] {
+.field input[type="number"],
+.field select {
   width: 100%;
   font-size: 1.15rem;
   padding: 12px 14px;
@@ -124,7 +125,8 @@ main {
   transition: border-color 0.15s ease;
 }
 
-.field input[type="number"]:focus {
+.field input[type="number"]:focus,
+.field select:focus {
   border-color: var(--primary);
 }
 
