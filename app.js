@@ -122,6 +122,31 @@ function initMaxPreis() {
       bruttoM2Out.textContent = "–";
       gesamtM2Out.textContent = "–";
     }
+
+    const faktorOut = document.getElementById("mp-faktor");
+    const badge = document.getElementById("mp-faktor-badge");
+    const renditeOut = document.getElementById("mp-rendite");
+    if (mieteJahr > 0 && gesamt > 0) {
+      const faktor = gesamt / mieteJahr;
+      const rendite = (mieteJahr / gesamt) * 100;
+      faktorOut.textContent = fmtNum.format(faktor);
+      renditeOut.textContent = `${fmtNum.format(rendite)} %`;
+      if (faktor < 12) {
+        badge.textContent = "Gut";
+        badge.className = "badge good";
+      } else if (faktor <= 16) {
+        badge.textContent = "Moderat";
+        badge.className = "badge ok";
+      } else {
+        badge.textContent = "Teuer";
+        badge.className = "badge bad";
+      }
+    } else {
+      faktorOut.textContent = "–";
+      badge.textContent = "–";
+      badge.className = "badge";
+      renditeOut.textContent = "–";
+    }
   }
 
   ids.forEach((id) => document.getElementById(id).addEventListener("input", update));
