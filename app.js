@@ -112,6 +112,16 @@ function initMaxPreis() {
     document.getElementById("mp-brutto").textContent = euro(brutto);
     document.getElementById("mp-renov").textContent = euro(renov);
     document.getElementById("mp-gesamt").textContent = euro(gesamt);
+
+    const bruttoM2Out = document.getElementById("mp-brutto-m2");
+    const gesamtM2Out = document.getElementById("mp-gesamt-m2");
+    if (groesse > 0) {
+      bruttoM2Out.textContent = euro(brutto / groesse);
+      gesamtM2Out.textContent = euro(gesamt / groesse);
+    } else {
+      bruttoM2Out.textContent = "–";
+      gesamtM2Out.textContent = "–";
+    }
   }
 
   ids.forEach((id) => document.getElementById(id).addEventListener("input", update));

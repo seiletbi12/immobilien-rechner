@@ -94,14 +94,25 @@ main {
 }
 
 .panel h2 {
-  font-size: 1.05rem;
-  margin-bottom: 14px;
+  font-size: 1rem;
+  margin-bottom: 10px;
   color: var(--text-muted);
   font-weight: 600;
 }
 
 .field {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px 12px;
+  margin-bottom: 14px;
+}
+
+.field-grid .field {
+  margin-bottom: 0;
 }
 
 .field label {
@@ -114,8 +125,8 @@ main {
 
 .field input[type="number"] {
   width: 100%;
-  font-size: 1.15rem;
-  padding: 12px 14px;
+  font-size: 1.1rem;
+  padding: 10px 12px;
   border: 1.5px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
@@ -132,19 +143,19 @@ main {
   background: var(--surface);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 6px 16px;
-  margin-bottom: 14px;
+  padding: 2px 14px;
+  margin-bottom: 10px;
 }
 
 .result-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0;
+  padding: 9px 0;
   border-bottom: 1px solid var(--border);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--text-muted);
-  gap: 12px;
+  gap: 10px;
 }
 
 .result-row:last-child {
@@ -152,7 +163,7 @@ main {
 }
 
 .result-row strong {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: var(--text);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -160,11 +171,11 @@ main {
 
 .result-row.highlight strong {
   color: var(--primary-dark);
-  font-size: 1.25rem;
+  font-size: 1.2rem;
 }
 
 .badge-row {
-  padding: 2px 0 12px;
+  padding: 2px 0 8px;
 }
 
 .badge {
