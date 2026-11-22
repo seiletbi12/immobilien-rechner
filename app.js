@@ -52,10 +52,13 @@ function initKaufpreis() {
     document.getElementById("kp-miete-jahr").textContent = euro(mieteJahr);
 
     const preisM2Out = document.getElementById("kp-preis-m2");
+    const preisM2VollOut = document.getElementById("kp-preis-m2-voll");
     if (groesse > 0 && preis > 0) {
       preisM2Out.textContent = euro(preis / groesse);
+      preisM2VollOut.textContent = euro(summe / groesse);
     } else {
       preisM2Out.textContent = "–";
+      preisM2VollOut.textContent = "–";
     }
 
     const faktorOut = document.getElementById("kp-faktor");
