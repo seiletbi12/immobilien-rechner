@@ -51,6 +51,13 @@ function initKaufpreis() {
     document.getElementById("kp-miete-monat").textContent = euro(mieteMonat);
     document.getElementById("kp-miete-jahr").textContent = euro(mieteJahr);
 
+    const preisM2Out = document.getElementById("kp-preis-m2");
+    if (groesse > 0 && preis > 0) {
+      preisM2Out.textContent = euro(preis / groesse);
+    } else {
+      preisM2Out.textContent = "–";
+    }
+
     const faktorOut = document.getElementById("kp-faktor");
     const badge = document.getElementById("kp-faktor-badge");
     if (faktor > 0) {
@@ -108,8 +115,29 @@ function initMaxPreis() {
   update();
 }
 
+function prefillFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const mapping = {
+    preis: ["kp-preis"],
+    groesse: ["kp-groesse", "mp-groesse"],
+    miete: ["kp-miete", "mp-miete"],
+    renov: ["kp-renov-prozent", "mp-renov-prozent"]
+  };
+  Object.entries(mapping).forEach(([key, ids]) => {
+    const raw = params.get(key);
+    if (raw === null) return;
+    const v = parseFloat(raw.replace(",", "."));
+    if (!Number.isFinite(v) || v < 0) return;
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.value = v;
+    });
+  });
+}
+
 function init() {
   bindTabs();
+  prefillFromUrl();
   initKaufpreis();
   initMaxPreis();
 
