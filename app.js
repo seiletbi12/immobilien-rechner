@@ -8,12 +8,45 @@ const fmtEuro = new Intl.NumberFormat("de-DE", {
 const fmtNum = new Intl.NumberFormat("de-DE", { maximumFractionDigits: 2 });
 
 function val(id) {
-  const v = parseFloat(document.getElementById(id).value);
+  const el = document.getElementById(id);
+  if (!el) return 0;
+  const v = parseFloat(el.value);
   return Number.isFinite(v) && v > 0 ? v : 0;
+}
+
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
 }
 
 function euro(v) {
   return fmtEuro.format(v);
+}
+
+function clampPercent(raw) {
+  return Math.min(100, Math.max(0, Number.isFinite(raw) ? raw : 0));
+}
+
+function applyBadge(idPrefix, faktor) {
+  const badge = document.getElementById(`${idPrefix}-faktor-badge`);
+  if (!badge) return;
+  if (faktor < 12) {
+    badge.textContent = "Gut";
+    badge.className = "badge good";
+  } else if (faktor <= 16) {
+    badge.textContent = "Moderat";
+    badge.className = "badge ok";
+  } else {
+    badge.textContent = "Teuer";
+    badge.className = "badge bad";
+  }
+}
+
+function applyBadgeEmpty(idPrefix) {
+  const badge = document.getElementById(`${idPrefix}-faktor-badge`);
+  if (!badge) return;
+  badge.textContent = "–";
+  badge.className = "badge";
 }
 
 function bindTabs() {
@@ -23,7 +56,8 @@ function bindTabs() {
       tabs.forEach((t) => t.classList.remove("active"));
       document.querySelectorAll(".panel").forEach((p) => p.classList.remove("active"));
       tab.classList.add("active");
-      document.getElementById(`panel-${tab.dataset.tab}`).classList.add("active");
+      const panel = document.getElementById(`panel-${tab.dataset.tab}`);
+      if (panel) panel.classList.add("active");
     });
   });
 }
@@ -35,7 +69,7 @@ function initKaufpreis() {
     const preis = val("kp-preis");
     const groesse = val("kp-groesse");
     const mieteProM2 = val("kp-miete");
-    const renovProzent = Math.min(100, Math.max(0, parseFloat(document.getElementById("kp-renov-prozent").value) || 0));
+    const renovProzent = clampPercent(parseFloat(document.getElementById("kp-renov-prozent")?.value));
 
     const neben = preis * 0.10;
     const renov = preis * (renovProzent / 100);
@@ -45,47 +79,29 @@ function initKaufpreis() {
     const faktor = mieteJahr > 0 ? summe / mieteJahr : 0;
     const rendite = summe > 0 ? (mieteJahr / summe) * 100 : 0;
 
-    document.getElementById("kp-neben").textContent = euro(neben);
-    document.getElementById("kp-renov").textContent = euro(renov);
-    document.getElementById("kp-summe").textContent = euro(summe);
-    document.getElementById("kp-miete-monat").textContent = euro(mieteMonat);
-    document.getElementById("kp-miete-jahr").textContent = euro(mieteJahr);
+    setText("kp-neben", euro(neben));
+    setText("kp-renov", euro(renov));
+    setText("kp-summe", euro(summe));
+    setText("kp-preis-m2", groesse > 0 && preis > 0 ? euro(preis / groesse) : "–");
+    setText("kp-preis-m2-voll", groesse > 0 && preis > 0 ? euro(summe / groesse) : "–");
+    setText("kp-miete-monat", euro(mieteMonat));
+    setText("kp-miete-jahr", euro(mieteJahr));
 
-    const preisM2Out = document.getElementById("kp-preis-m2");
-    const preisM2VollOut = document.getElementById("kp-preis-m2-voll");
-    if (groesse > 0 && preis > 0) {
-      preisM2Out.textContent = euro(preis / groesse);
-      preisM2VollOut.textContent = euro(summe / groesse);
-    } else {
-      preisM2Out.textContent = "–";
-      preisM2VollOut.textContent = "–";
-    }
-
-    const faktorOut = document.getElementById("kp-faktor");
-    const badge = document.getElementById("kp-faktor-badge");
     if (faktor > 0) {
-      faktorOut.textContent = fmtNum.format(faktor);
-      if (faktor < 12) {
-        badge.textContent = "Gut";
-        badge.className = "badge good";
-      } else if (faktor <= 16) {
-        badge.textContent = "Moderat";
-        badge.className = "badge ok";
-      } else {
-        badge.textContent = "Teuer";
-        badge.className = "badge bad";
-      }
+      setText("kp-faktor", fmtNum.format(faktor));
+      applyBadge("kp", faktor);
     } else {
-      faktorOut.textContent = "–";
-      badge.textContent = "–";
-      badge.className = "badge";
+      setText("kp-faktor", "–");
+      applyBadgeEmpty("kp");
     }
 
-    document.getElementById("kp-rendite").textContent =
-      rendite > 0 ? `${fmtNum.format(rendite)} %` : "–";
+    setText("kp-rendite", rendite > 0 ? `${fmtNum.format(rendite)} %` : "–");
   }
 
-  ids.forEach((id) => document.getElementById(id).addEventListener("input", update));
+  ids.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("input", update);
+  });
   update();
 }
 
@@ -95,7 +111,7 @@ function initMaxPreis() {
   function update() {
     const groesse = val("mp-groesse");
     const mieteProM2 = val("mp-miete");
-    const renovProzent = Math.min(100, Math.max(0, parseFloat(document.getElementById("mp-renov-prozent").value) || 0));
+    const renovProzent = clampPercent(parseFloat(document.getElementById("mp-renov-prozent")?.value));
 
     const mieteMonat = groesse * mieteProM2;
     const mieteJahr = mieteMonat * 12;
@@ -104,52 +120,34 @@ function initMaxPreis() {
     const brutto = netto + neben;
     const renov = netto * (renovProzent / 100);
     const gesamt = brutto + renov;
+    const faktor = mieteJahr > 0 && gesamt > 0 ? gesamt / mieteJahr : 0;
+    const rendite = gesamt > 0 ? (mieteJahr / gesamt) * 100 : 0;
 
-    document.getElementById("mp-miete-monat").textContent = euro(mieteMonat);
-    document.getElementById("mp-miete-jahr").textContent = euro(mieteJahr);
-    document.getElementById("mp-netto").textContent = euro(netto);
-    document.getElementById("mp-neben").textContent = euro(neben);
-    document.getElementById("mp-brutto").textContent = euro(brutto);
-    document.getElementById("mp-renov").textContent = euro(renov);
-    document.getElementById("mp-gesamt").textContent = euro(gesamt);
+    setText("mp-miete-monat", euro(mieteMonat));
+    setText("mp-miete-jahr", euro(mieteJahr));
+    setText("mp-netto", euro(netto));
+    setText("mp-neben", euro(neben));
+    setText("mp-brutto", euro(brutto));
+    setText("mp-brutto-m2", groesse > 0 ? euro(brutto / groesse) : "–");
+    setText("mp-renov", euro(renov));
+    setText("mp-gesamt", euro(gesamt));
+    setText("mp-gesamt-m2", groesse > 0 ? euro(gesamt / groesse) : "–");
 
-    const bruttoM2Out = document.getElementById("mp-brutto-m2");
-    const gesamtM2Out = document.getElementById("mp-gesamt-m2");
-    if (groesse > 0) {
-      bruttoM2Out.textContent = euro(brutto / groesse);
-      gesamtM2Out.textContent = euro(gesamt / groesse);
+    if (faktor > 0) {
+      setText("mp-faktor", fmtNum.format(faktor));
+      applyBadge("mp", faktor);
     } else {
-      bruttoM2Out.textContent = "–";
-      gesamtM2Out.textContent = "–";
+      setText("mp-faktor", "–");
+      applyBadgeEmpty("mp");
     }
 
-    const faktorOut = document.getElementById("mp-faktor");
-    const badge = document.getElementById("mp-faktor-badge");
-    const renditeOut = document.getElementById("mp-rendite");
-    if (mieteJahr > 0 && gesamt > 0) {
-      const faktor = gesamt / mieteJahr;
-      const rendite = (mieteJahr / gesamt) * 100;
-      faktorOut.textContent = fmtNum.format(faktor);
-      renditeOut.textContent = `${fmtNum.format(rendite)} %`;
-      if (faktor < 12) {
-        badge.textContent = "Gut";
-        badge.className = "badge good";
-      } else if (faktor <= 16) {
-        badge.textContent = "Moderat";
-        badge.className = "badge ok";
-      } else {
-        badge.textContent = "Teuer";
-        badge.className = "badge bad";
-      }
-    } else {
-      faktorOut.textContent = "–";
-      badge.textContent = "–";
-      badge.className = "badge";
-      renditeOut.textContent = "–";
-    }
+    setText("mp-rendite", rendite > 0 ? `${fmtNum.format(rendite)} %` : "–");
   }
 
-  ids.forEach((id) => document.getElementById(id).addEventListener("input", update));
+  ids.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("input", update);
+  });
   update();
 }
 
@@ -181,6 +179,15 @@ function init() {
 
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js").catch(() => {});
+
+    // Wenn ein neuer Service Worker aktiv wird, Seite einmal neu laden,
+    // damit HTML und Script immer zusammenpassen.
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
   }
 }
 

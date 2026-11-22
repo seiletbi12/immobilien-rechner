@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE = "immobilien-rechner-v3";
+const CACHE = "immobilien-rechner-v1";
 const ASSETS = [
   "index.html",
   "styles.css",
@@ -26,12 +26,6 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
   event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        const copy = response.clone();
-        caches.open(CACHE).then((cache) => cache.put(event.request, copy));
-        return response;
-      })
-      .catch(() => caches.match(event.request))
+    caches.match(event.request).then((cached) => cached || fetch(event.request))
   );
 });
